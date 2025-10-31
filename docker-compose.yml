@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  webhook:
+    build:
+      context: .
+      dockerfile: docker/webhook.Dockerfile
+    env_file:
+      - .env
+    environment:
+      - LEARNING_DB=/data/learning.db
+    volumes:
+      - db_data:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/dashboard.Dockerfile
+    env_file:
+      - .env
+    environment:
+      - LEARNING_DB=/data/learning.db
+    volumes:
+      - db_data:/data
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  db_data:
+    driver: local
+
